@@ -6,15 +6,11 @@ import logging
 
 app = Flask(__name__)
 
-# ---------------------------
-# Logging (production ready)
-# ---------------------------
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# ---------------------------
-# Load model safely
-# ---------------------------
+
 MODEL_PATH = os.path.join("model", "best_rf_model.pkl")
 ENCODER_PATH = os.path.join("model", "label_encoders.pkl")
 
@@ -39,9 +35,7 @@ cat_cols = [
 ]
 
 
-# ---------------------------
-# Home page
-# ---------------------------
+
 @app.route("/")
 def home():
 
@@ -60,9 +54,7 @@ def home():
     )
 
 
-# ---------------------------
-# Prediction route
-# ---------------------------
+
 @app.route("/predict", methods=["POST"])
 def predict():
 
@@ -114,8 +106,6 @@ def predict():
     )
 
 
-# ---------------------------
-# Run locally
-# ---------------------------
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
