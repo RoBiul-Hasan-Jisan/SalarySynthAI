@@ -21,6 +21,8 @@ SalarySynthAI helps **job seekers, recruiters, and companies** estimate expected
 
 SalarySynthAI uses the **AI job market dataset for 2025–2026**, containing:
 
+Link: https://www.kaggle.com/datasets/alitaqishah/ai-jobs-market-2025-2026-salaries
+
 - Job Title  
 - Experience Level  
 - Education Required  
