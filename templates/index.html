@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Job Salary Predictor</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        h2 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 28px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+        
+        form {
+            display: grid;
+            gap: 20px;
+        }
+        
+        .form-group {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        label {
+            font-weight: 600;
+            color: #555;
+            font-size: 14px;
+        }
+        
+        select, input {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        
+        select:focus, input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 5px rgba(102,126,234,0.3);
+        }
+        
+        button {
+            background: #667eea;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        button:hover {
+            background: #764ba2;
+        }
+        
+        .prediction-box {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            text-align: center;
+            border-left: 4px solid #667eea;
+        }
+        
+        .prediction-box h3 {
+            color: #333;
+            font-size: 20px;
+        }
+        
+        .prediction-box span {
+            color: #667eea;
+            font-size: 24px;
+            font-weight: 700;
+            display: block;
+            margin-top: 10px;
+        }
+        
+        @media (max-width: 600px) {
+            .form-group {
+                grid-template-columns: 1fr;
+                gap: 5px;
+            }
+            
+            .container {
+                padding: 20px;
+            }
+        }
+        
+        .note {
+            font-size: 12px;
+            color: #888;
+            margin-top: 5px;
+            text-align: right;
+        }
+        
+        .required::after {
+            content: "*";
+            color: red;
+            margin-left: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>AI Job Salary Predictor (2025-2026)</h2>
+        
+        <form action="/predict" method="post" id="predictionForm">
+            <div class="form-group">
+                <label class="required">Job Title:</label>
+                <select name="job_title" required>
+                    <option value="">Select Job Title</option>
+                    {% for item in job_titles %}
+                    <option value="{{item}}">{{item}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="required">Experience Level:</label>
+                <select name="experience_level" required>
+                    <option value="">Select Experience Level</option>
+                    {% for item in experience_levels %}
+                    <option value="{{item}}">{{item}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="required">Education Required:</label>
+                <select name="education_required" required>
+                    <option value="">Select Education Level</option>
+                    {% for item in educations %}
+                    <option value="{{item}}">{{item}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="required">Country:</label>
+                <select name="country" required>
+                    <option value="">Select Country</option>
+                    {% for item in countries %}
+                    <option value="{{item}}">{{item}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="required">Remote Work:</label>
+                <select name="remote_work" required>
+                    <option value="">Select Remote Option</option>
+                    {% for item in remote_options %}
+                    <option value="{{item}}">{{item}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="required">Company Size:</label>
+                <select name="company_size" required>
+                    <option value="">Select Company Size</option>
+                    {% for item in company_sizes %}
+                    <option value="{{item}}">{{item}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="required">Industry:</label>
+                <select name="industry" required>
+                    <option value="">Select Industry</option>
+                    {% for item in industries %}
+                    <option value="{{item}}">{{item}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="required">Years of Experience:</label>
+                <input type="number" name="years_of_experience" min="0" max="50" step="0.5" placeholder="0-50 years" required>
+            </div>
+
+            <div class="form-group">
+                <label class="required">Salary Range:</label>
+                <input type="number" name="salary_range" min="0" step="1000" placeholder="e.g., 50000" required>
+            </div>
+
+            <div class="form-group">
+                <label class="required">Salary Mid:</label>
+                <input type="number" name="salary_mid" min="0" step="1000" placeholder="e.g., 75000" required>
+            </div>
+
+            <div class="form-group">
+                <label class="required">Skill Count:</label>
+                <input type="number" name="skill_count" min="1" max="20" placeholder="1-20 skills" required>
+            </div>
+
+            <div class="form-group">
+                <label class="required">Demand Score:</label>
+                <input type="number" name="demand_score" min="0" max="100" step="1" placeholder="0-100" required>
+            </div>
+
+            <button type="submit">Predict Salary</button>
+        </form>
+
+        {% if prediction %}
+        <div class="prediction-box">
+            <h3>Predicted Salary:</h3>
+            <span>{{ prediction }}</span>
+            <div class="note">*Prediction based on 2025-2026 market data</div>
+        </div>
+        {% endif %}
+        
+        {% if error %}
+        <div class="prediction-box" style="border-left-color: #dc3545;">
+            <h3 style="color: #dc3545;">Error:</h3>
+            <span>{{ error }}</span>
+        </div>
+        {% endif %}
+    </div>
+
+    <script>
+        // Form validation
+        document.getElementById('predictionForm').addEventListener('submit', function(e) {
+            const inputs = this.querySelectorAll('input[required], select[required]');
+            let isValid = true;
+            
+            inputs.forEach(input => {
+                if (!input.value) {
+                    input.style.borderColor = '#dc3545';
+                    isValid = false;
+                } else {
+                    input.style.borderColor = '#ddd';
+                }
+            });
+            
+            if (!isValid) {
+                e.preventDefault();
+                alert('Please fill in all required fields');
+            }
+        });
+        
+        // Auto-format salary inputs
+        document.querySelectorAll('input[type="number"]').forEach(input => {
+            input.addEventListener('blur', function() {
+                if (this.value && this.name.includes('salary')) {
+                    // Keep as number but show formatted placeholder
+                    this.style.backgroundColor = '#f8f9fa';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
